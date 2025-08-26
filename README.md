@@ -1,6 +1,6 @@
 # LineScript4
 
-LineScript4 is a small stack based language implemented in [src/linescript4/linescript4.go](src/linescript4/linescript4.go).  The interpreter parses tokens separated by whitespace and uses a stack for evaluation.
+LineScript4 is a small stack based language.  The interpreter parses tokens separated by whitespace and uses a stack for evaluation.
 
 This document gives a brief overview of the language features gathered from the Go implementation.  Only the interpreter file was inspected for this information.
 
@@ -22,7 +22,7 @@ Variables are stored in a record.  When assigning you pass the variable name as 
 
 ```text
 let .x 10        # set variable x to 10
-local .y 20      # set y only in the current scope
+var .y 20      # set y only in the current scope
 ```
 
 `def` defines a function and stores it under a name in the current scope:
