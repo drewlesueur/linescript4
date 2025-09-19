@@ -192,3 +192,63 @@ def findBetween s after before
     
     afterPart slice 1 endI - 1
 end
+
+def parseCsv theText
+    var hasHeader false
+    var parseState "out"
+    var valStart 1
+    var isQuoted false
+    var rows []
+    var curRow []
+    var headers null
+    
+    theText each i t
+        if parseState is "out"
+            if t is ","
+                var theVal theText slice valStart i - 1
+                if isQuoted
+                    update theVal replace '""' '"'
+                    update theVal slice 2 -2
+                end
+                curRow push theVal
+                let valStart i + 1
+                let isQuoted false
+            else if t is newline
+                var theVal theText slice valStart i - 1
+                if isQuoted
+                    update theVal replace '""' '"'
+                    update theVal slice 2 -2
+                end
+                curRow push theVal
+                let valStart i + 1
+                let isQuoted false
+                
+                if headers is null
+                    let headers curRow
+                else
+                    var rowObj {}
+                    headers each fieldI field
+                        rowObj setProp field curRow sub fieldI
+                    end
+                    rows push rowObj
+                    # say rowObj
+                end
+                let curRow []
+            else if t is '"'
+                let parseState "in"
+                let isQuoted true
+            end
+        else if parseState is "in"
+            if t is '"'
+                if theText sub (i + 1) is '"'
+                    # nothing
+                else
+                    let parseState "out"
+                end
+            else if t is newline
+            end
+        
+        end
+    end
+    rows
+end
